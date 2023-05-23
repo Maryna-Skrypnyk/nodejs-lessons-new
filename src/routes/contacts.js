@@ -7,10 +7,10 @@ const {
   addContact,
   updateContact,
   deleteContact,
-} = require("../../controllers/contacts");
+} = require("../controllers/contacts");
 
-const { validateBody } = require("../../../middlewares");
-const { addSchema, updateSchema } = require("../../../schemas/contacts");
+const { validateBody } = require("../../middlewares");
+const { addSchema, updateSchema } = require("../../schemas/contacts");
 
 router.get("/", getContacts);
 
