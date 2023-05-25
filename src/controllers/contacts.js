@@ -2,7 +2,11 @@ const { Contact } = require("../../models/contact");
 const { HttpError, ctrlWrapper } = require("../../helpers");
 
 const getContacts = async (req, res) => {
-  const contacts = await Contact.find();
+  const { _id: owner } = req.user;
+  const contacts = await Contact.find({ owner }).populate(
+    "owner",
+    "name email"
+  );
   res.json({ status: "success", code: 200, data: { contacts } });
 };
 
@@ -22,7 +26,8 @@ const getContact = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const contact = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const contact = await Contact.create({ ...req.body, owner });
   res.status(201).json({
     status: "success",
     code: 201,

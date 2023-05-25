@@ -10,19 +10,20 @@ const {
   deleteContact,
 } = require("../controllers/contacts");
 
-const { validateBody, isValidId } = require("../../middlewares");
+const { validateBody, isValidId, authenticate } = require("../../middlewares");
 const { schemas } = require("../../models/contact");
 
-router.get("/", getContacts);
+router.get("/", authenticate, getContacts);
 
-router.get("/:contactId", isValidId, getContact);
+router.get("/:contactId", authenticate, isValidId, getContact);
 
-router.post("/", validateBody(schemas.addSchema), addContact);
+router.post("/", authenticate, validateBody(schemas.addSchema), addContact);
 
-router.delete("/:contactId", isValidId, deleteContact);
+router.delete("/:contactId", authenticate, isValidId, deleteContact);
 
 router.put(
   "/:contactId",
+  authenticate,
   isValidId,
   validateBody(schemas.addSchema),
   updateContact
@@ -30,6 +31,7 @@ router.put(
 
 router.patch(
   "/:contactId",
+  authenticate,
   isValidId,
   validateBody(schemas.updateSchema),
   updateContact
@@ -37,6 +39,7 @@ router.patch(
 
 router.patch(
   "/:contactId/favorite",
+  authenticate,
   isValidId,
   validateBody(schemas.statusContactSchema),
   updateStatusContact
