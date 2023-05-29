@@ -8,7 +8,11 @@ const patternEmail = /\S+@\S+.\S+/;
 // схема і валідація для збереження в базу даних (mongoose)
 const userSchema = new Schema(
   {
-    name: { type: String, default: "Guest" },
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+      default: "Guest",
+    },
     email: {
       type: String,
       unique: [true, "bd already includes email"],
@@ -43,7 +47,7 @@ const signupSchema = Joi.object({
     .alphanum()
     // .min(ValidLengthContactName.MIN_LENGTH_NAME)
     // .max(ValidLengthContactName.MAX_LENGTH_NAME)
-    .optional(),
+    .required(),
   email: Joi.string().pattern(new RegExp(patternEmail)).required(),
   password: Joi.string().min(8).pattern(new RegExp(patternPassword)).required(),
   //   subscription: Joi.string()

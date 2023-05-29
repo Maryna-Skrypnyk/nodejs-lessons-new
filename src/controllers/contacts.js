@@ -7,7 +7,12 @@ const getContacts = async (req, res) => {
     "owner",
     "name email"
   );
-  res.json({ status: "success", code: 200, data: { contacts } });
+  res.json({
+    status: "success",
+    code: 200,
+    message: "Contacts list found!",
+    data: { contacts },
+  });
 };
 
 const getContact = async (req, res) => {
@@ -18,8 +23,8 @@ const getContact = async (req, res) => {
     return res.json({
       status: "success",
       code: 200,
-      data: { contact },
       message: `Contact with id ${contactId} found!`,
+      data: { contact },
     });
   }
   throw HttpError(404, `Contact with id ${contactId} not found!`);
@@ -31,8 +36,8 @@ const addContact = async (req, res) => {
   res.status(201).json({
     status: "success",
     code: 201,
-    data: { contact },
     message: `Contact with name ${req.body.name} added successfully!`,
+    data: { contact },
   });
 };
 
@@ -45,8 +50,8 @@ const updateContact = async (req, res) => {
     return res.json({
       status: "success",
       code: 200,
-      data: { contact },
       message: `Contact with id ${contactId} updated successful!`,
+      data: { contact },
     });
   }
   throw HttpError(404, `Contact with id ${contactId} not found!`);
@@ -61,8 +66,8 @@ const updateStatusContact = async (req, res) => {
     return res.json({
       status: "success",
       code: 200,
+      message: `Status contact with name ${contact.name} updated successfully!`,
       data: { contact },
-      message: `Status contact with name ${contact.name} updated!`,
     });
   }
   throw HttpError(404, `Contact with id ${contactId} not found!`);
@@ -76,8 +81,8 @@ const deleteContact = async (req, res) => {
     return res.json({
       status: "success",
       code: 200,
-      data: { contact },
       message: `Contact with id ${contactId} removed!`,
+      data: { contact },
     });
   }
   throw HttpError(404, `Contact with id ${contactId} not found!`);

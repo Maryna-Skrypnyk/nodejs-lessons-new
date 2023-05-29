@@ -19,6 +19,7 @@ const signup = async (req, res) => {
   res.status(201).json({
     status: "success",
     code: 201,
+    message: "User created",
     data: {
       id: newUser.id,
       name: newUser.name,
@@ -30,8 +31,11 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email or password invalid");
+  }
   const passwordCompare = await bcrypt.compare(password, user.password); // перевіряємо відповідність пароля з паролем, захешованим в базі даних
-  if (!user || !passwordCompare) {
+  if (!passwordCompare) {
     throw HttpError(401, "Email or password invalid");
   }
 
@@ -45,6 +49,7 @@ const login = async (req, res) => {
   res.status(200).json({
     status: "success",
     code: 200,
+    message: "User is logged in",
     data: { token },
   });
 };
@@ -53,9 +58,7 @@ const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" }); // очищаємо токен при запиті на logout
 
-  res.status(204).json({
-    message: "Logout success",
-  });
+  res.status(204).json({});
 };
 
 const current = async (req, res) => {
@@ -63,6 +66,7 @@ const current = async (req, res) => {
   res.status(200).json({
     status: "success",
     code: 200,
+    message: "Information found",
     data: {
       email,
       name,

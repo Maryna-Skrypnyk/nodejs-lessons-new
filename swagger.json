@@ -1,0 +1,2106 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "1.0.11",
+    "title": "Contacts-new",
+    "description": "REST API Contacts Application",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "contact": {
+      "name": "Maryna Skrypnyk",
+      "url": "https://github.com/Maryna-Skrypnyk",
+      "email": "marina.skrypnyk@gmail.com"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "https://nodejs-contacts-new.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Contact",
+      "description": "Contacts endpoints"
+    }
+  ],
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User registration",
+        "requestBody": {
+          "description": "Created user object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["name", "email", "password"],
+                "example": {
+                  "name": "User Name",
+                  "email": "user@mail.com",
+                  "password": "examplePwd123"
+                },
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Backend-generated unique identifier"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "UserName"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "E-mail address"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "201"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "User created"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "id": "60d9f35e8a52085120891b18",
+                        "name": "UserName",
+                        "email": "user@example.com",
+                        "avatar": "https://path.to.user.avatar",
+                        "successEmail": true
+                      },
+                      "properties": {
+                        "id": { "type": "string" },
+                        "name": { "type": "string" },
+                        "email": { "type": "string" },
+                        "avatar": { "type": "string" },
+                        "successEmail": { "type": "boolean" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email already in use"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Field email must be a valid email"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User authentication",
+        "parameters": [],
+        "requestBody": {
+          "description": "Authentication's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "example": {
+                  "email": "user@example.com",
+                  "password": "examplePwd123"
+                },
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "E-mail address"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User is logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "User is logged in"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "token": "User token"
+                      },
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email or password is wrong"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Log out user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Logout success",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Current user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": "true",
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Information found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "email": "user@example.com",
+                        "name": "UserName"
+                      },
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "User e-mail address"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "User name"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing header with authorization token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "Bearer": []
+            }
+          ]
+        }
+      }
+    },
+    "/api/auth/update": {
+      "put": {
+        "tags": ["User"],
+        "summary": "User info update",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "User info change",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Nick"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "security": [
+            {
+              "Bearer": []
+            }
+          ]
+        }
+      }
+    },
+    "/api/auth/avatars": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "User avatar",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "avatar",
+            "in": "query",
+            "description": "upload a new avatar",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "file"
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "security": [
+            {
+              "Bearer": []
+            }
+          ]
+        }
+      }
+    },
+    "/api/auth/verify": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User verification via e-mail",
+        "parameters": [],
+        "requestBody": {
+          "description": "Resending email verification",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "409": {
+            "description": "Email has not been verified",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Google authentication ",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "403": {
+            "description": "Not registered or registered with postman",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/auth/verify/:verifyToken": {
+      "get": {
+        "tags": ["User"],
+        "summary": "verifyToken",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation (redirect to front-end with token in query). Then use GET /user/info",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          },
+          "security": [
+            {
+              "Bearer": []
+            }
+          ]
+        }
+      }
+    },
+    "/api/contacts": {
+      "post": {
+        "tags": ["Contact"],
+        "summary": "Create a new contact",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": "true",
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "description": "Contact's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["name", "phone"],
+                "example": {
+                  "name": "ContactName",
+                  "surname": "ContactSurname",
+                  "email": "contact@mail.com",
+                  "phone": "1234567891",
+                  "favorite": false
+                },
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "description": "Backend-generated unique identifier"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Contact name"
+                  },
+                  "surname": {
+                    "type": "string",
+                    "description": "Contact surname"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Contact e-mail address"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Contact phone number"
+                  },
+                  "favorite": {
+                    "type": "boolean",
+                    "description": "Contact status"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created a new contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "201"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Contact with name ContactName added successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "properties": {
+                        "contact": {
+                          "type": "object",
+                          "description": "Contact data",
+                          "example": {
+                            "_id": "64732ed662c35a99818f8e76",
+                            "name": "ContactName",
+                            "surname": "ContactSurname",
+                            "email": "contact@example.com",
+                            "phone": "1234567891",
+                            "favorite": true,
+                            "owner": "6193b4f36a453535c5b9cfe3",
+                            "createdAt": "2023-05-28T10:37:10.736Z",
+                            "updatedAt": "2023-05-28T10:37:10.736Z"
+                          },
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "description": "Contact id"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Contact name"
+                            },
+                            "surname": {
+                              "type": "string",
+                              "description": "Contact surname"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Contact email"
+                            },
+                            "phone": {
+                              "type": "string",
+                              "description": "Contact phone"
+                            },
+                            "favorite": {
+                              "type": "boolean",
+                              "description": "Contact status"
+                            },
+                            "owner": {
+                              "type": "string",
+                              "description": "User id"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "description": "Contact created date"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "description": "Contact updated Date"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error creating contact"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing header with authorization token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The contact is already in the contact list"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Contact"],
+        "summary": "Get all contacts",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Contacts list found!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "properties": {
+                        "contacts": {
+                          "type": "array",
+                          "description": "List contacts",
+                          "items": {
+                            "type": "object",
+                            "description": "Contact",
+                            "example": {
+                              "_id": "64733a6f45fa74dae5b030b7",
+                              "name": "ContactName",
+                              "email": "contact@example.com",
+                              "phone": "1234567891",
+                              "favorite": true,
+                              "owner": {
+                                "_id": "6471c88b6b03b808c771ba04",
+                                "name": "UserName",
+                                "email": "user@example.com"
+                              },
+                              "createdAt": "2023-05-28T11:26:39.483Z",
+                              "updatedAt": "2023-05-28T11:26:39.483Z"
+                            },
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "description": "Contact Id"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "Contact name"
+                              },
+                              "email": {
+                                "type": "string",
+                                "description": "Contact email"
+                              },
+                              "phone": {
+                                "type": "string",
+                                "description": "Contact phone"
+                              },
+                              "favorite": {
+                                "type": "boolean",
+                                "description": "Contact status"
+                              },
+                              "owner": {
+                                "type": "object",
+                                "description": "Contact owner data",
+                                "example": {
+                                  "_id": "6471c88b6b03b808c771ba04",
+                                  "name": "UserName",
+                                  "email": "user@example.com"
+                                },
+                                "properties": {
+                                  "_id": { "type": "string" },
+                                  "name": { "type": "string" },
+                                  "email": { "type": "string" }
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "description": "Created date"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "description": "Updated date"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing header with authorization token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "There is no such user collection"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/{contactId}": {
+      "get": {
+        "tags": ["Contact"],
+        "summary": "Get contact by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Contact ID",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Contact found!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "properties": {
+                        "contact": {
+                          "type": "object",
+                          "description": "contact object",
+                          "example": {
+                            "_id": "6471c88b6b03b808c771ba04",
+                            "name": "ContactName",
+                            "email": "contact@example.com",
+                            "phone": "1234567891",
+                            "favorite": true,
+                            "owner": "6193b4f36a453535c5b9cfe3",
+                            "createdAt": "2023-05-28T11:26:39.483Z",
+                            "updatedAt": "2023-05-28T11:26:39.483Z"
+                          },
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "description": "Contact id"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Contact Name"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Contact email"
+                            },
+                            "phone": {
+                              "type": "string",
+                              "description": "Contact phone"
+                            },
+                            "favorite": {
+                              "type": "boolean",
+                              "description": "Contact status"
+                            },
+                            "owner": {
+                              "type": "string",
+                              "description": "User id"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "description": "Created date"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "description": "Updated date"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing header with authorization token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Contact with id ID not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Contact"],
+        "summary": "Update contact by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Contact ID",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "description": "Contact's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "name": "ContactName",
+                  "surname": "ContactSurname",
+                  "email": "contact@mail.com",
+                  "phone": "1234567891",
+                  "favorite": true
+                },
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "description": "Contact name" },
+                  "surname": {
+                    "type": "string",
+                    "description": "Contact surname"
+                  },
+                  "email": { "type": "string", "description": "Contact email" },
+                  "phone": { "type": "string", "description": "Contact phone" },
+                  "favorite": {
+                    "type": "boolean",
+                    "description": "Contact status"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Contact with name ContactName updated successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "properties": {
+                        "contact": {
+                          "type": "object",
+                          "description": "Contact data",
+                          "example": {
+                            "_id": "64732ed662c35a99818f8e76",
+                            "name": "ContactName",
+                            "surname": "ContactSurname",
+                            "email": "contact@example.com",
+                            "phone": "1234567891",
+                            "favorite": true,
+                            "owner": "6193b4f36a453535c5b9cfe3",
+                            "createdAt": "2023-05-28T10:37:10.736Z",
+                            "updatedAt": "2023-05-28T10:37:10.736Z"
+                          },
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "description": "Contact id"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Contact name"
+                            },
+                            "surname": {
+                              "type": "string",
+                              "description": "Contact surname"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Contact email"
+                            },
+                            "phone": {
+                              "type": "string",
+                              "description": "Contact phone"
+                            },
+                            "favorite": {
+                              "type": "boolean",
+                              "description": "Contact status"
+                            },
+                            "owner": {
+                              "type": "string",
+                              "description": "User id"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "description": "Contact created date"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "description": "Contact updated Date"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error updating contact"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing header with authorization token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Contact"],
+        "summary": "Update contact by id partly",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Contact ID",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "description": "Contact's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "name": "ContactName",
+                  "surname": "ContactSurname",
+                  "email": "contact@mail.com",
+                  "phone": "1234567891",
+                  "favorite": true
+                },
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "description": "Contact name" },
+                  "surname": {
+                    "type": "string",
+                    "description": "Contact surname"
+                  },
+                  "email": { "type": "string", "description": "Contact email" },
+                  "phone": { "type": "string", "description": "Contact phone" },
+                  "favorite": {
+                    "type": "boolean",
+                    "description": "Contact status"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Contact with name ContactName updated successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "properties": {
+                        "contact": {
+                          "type": "object",
+                          "description": "Contact data",
+                          "example": {
+                            "_id": "64732ed662c35a99818f8e76",
+                            "name": "ContactName",
+                            "surname": "ContactSurname",
+                            "email": "contact@example.com",
+                            "phone": "1234567891",
+                            "favorite": true,
+                            "owner": "6193b4f36a453535c5b9cfe3",
+                            "createdAt": "2023-05-28T10:37:10.736Z",
+                            "updatedAt": "2023-05-28T10:37:10.736Z"
+                          },
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "description": "Contact id"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Contact name"
+                            },
+                            "surname": {
+                              "type": "string",
+                              "description": "Contact surname"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Contact email"
+                            },
+                            "phone": {
+                              "type": "string",
+                              "description": "Contact phone"
+                            },
+                            "favorite": {
+                              "type": "boolean",
+                              "description": "Contact status"
+                            },
+                            "owner": {
+                              "type": "string",
+                              "description": "User id"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "description": "Contact created date"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "description": "Contact updated Date"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error updating contact"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing header with authorization token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Contact"],
+        "summary": "Delete contact by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Contact ID",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Contact with id contactId removed!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "properties": {
+                        "contact": {
+                          "type": "object",
+                          "description": "contact object",
+                          "example": {
+                            "_id": "6471c88b6b03b808c771ba04",
+                            "name": "ContactName",
+                            "email": "contact@example.com",
+                            "phone": "1234567891",
+                            "favorite": true,
+                            "owner": "6193b4f36a453535c5b9cfe3",
+                            "createdAt": "2023-05-28T11:26:39.483Z",
+                            "updatedAt": "2023-05-28T11:26:39.483Z"
+                          },
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "description": "Contact id"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Contact Name"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Contact email"
+                            },
+                            "phone": {
+                              "type": "string",
+                              "description": "Contact phone"
+                            },
+                            "favorite": {
+                              "type": "boolean",
+                              "description": "Contact status"
+                            },
+                            "owner": {
+                              "type": "string",
+                              "description": "User id"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "description": "Created date"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "description": "Updated date"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing header with authorization token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Contact with id ID not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/{contactId}/favorite": {
+      "patch": {
+        "tags": ["Contact"],
+        "summary": "Update contact status by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Contact ID",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "description": "Contact's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "favorite": true
+                },
+                "type": "object",
+                "properties": {
+                  "favorite": {
+                    "type": "boolean",
+                    "description": "Contact status"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Contact status with name ContactName updated successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "properties": {
+                        "contact": {
+                          "type": "object",
+                          "description": "Contact data",
+                          "example": {
+                            "_id": "64733a3345fa74dae5b030ab",
+                            "name": "ContactName",
+                            "surname": "ContactSurname",
+                            "email": "contact@example.com",
+                            "phone": "1234567891",
+                            "favorite": true,
+                            "owner": "6193b4f36a453535c5b9cfe3",
+                            "createdAt": "2023-05-28T10:37:10.736Z",
+                            "updatedAt": "2023-05-28T10:37:10.736Z"
+                          },
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "description": "Contact id"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Contact name"
+                            },
+                            "surname": {
+                              "type": "string",
+                              "description": "Contact surname"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Contact email"
+                            },
+                            "phone": {
+                              "type": "string",
+                              "description": "Contact phone"
+                            },
+                            "favorite": {
+                              "type": "boolean",
+                              "description": "Contact status"
+                            },
+                            "owner": {
+                              "type": "string",
+                              "description": "User id"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "description": "Contact created date"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "description": "Contact updated Date"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error updating contact status"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing header with authorization token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "required": ["name", "email", "password"],
+        "type": "object",
+        "example": {
+          "_id": "646f870d4acd56bc2e92755b",
+          "name": "UserName",
+          "email": "user@mail.com",
+          "password": "examplePwd123",
+          "token": "user token",
+          "idUserCloud": "n8wzoryzzbyojdunoqmf",
+          "verify": true,
+          "verifyToken": "user token",
+          "avatarURL": "https://path.to.user.avatar",
+          "createdAt": "2023-05-26T13:41:07.193+00:00",
+          "updatedAt": "2023-05-26T13:48:44.991+00:00"
+        },
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Backend-generated unique identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password"
+          },
+          "token": {
+            "type": "string",
+            "description": "User token"
+          },
+          "idUserCloud": {
+            "type": "string",
+            "description": "User cloud id"
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "Verify"
+          },
+          "verifyToken": {
+            "type": "string",
+            "description": "User token"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User avatar"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Created date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Updated date"
+          }
+        }
+      },
+      "Contact": {
+        "required": ["name", "phone", "owner"],
+        "type": "object",
+        "example": {
+          "_id": "646f870d4acd56bc2e92755b",
+          "name": "ContactName",
+          "surname": "ContactSurname",
+          "email": "contact@mail.com",
+          "phone": "1234567891",
+          "favorite": false,
+          "owner": "6193b4f36a453535c5b9cfe3",
+          "createdAt": "2023-05-26T13:41:07.193+00:00",
+          "updatedAt": "2023-05-26T13:48:44.991+00:00"
+        },
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Backend-generated unique identifier"
+          },
+          "name": {
+            "type": "String",
+            "description": "Contact name"
+          },
+          "surname": {
+            "type": "String",
+            "description": "Contact surname"
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone"
+          },
+          "favorite": {
+            "type": "boolean",
+            "description": "Contact status"
+          },
+          "owner": {
+            "type": "string",
+            "example": "6193b4f36a453535c5b9cfe3"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Created date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Updated date"
+          }
+        }
+      }
+    }
+  },
+  "securitySchemes": {
+    "Bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  }
+}
