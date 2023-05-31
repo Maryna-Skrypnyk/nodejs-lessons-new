@@ -1,10 +1,15 @@
 const bcrypt = require("bcrypt"); // для хешування паролю в базі даних
 const jwt = require("jsonwebtoken"); // для створення і верифікації токену
+// const gravatar = require("gravatar"); // для створення тимчасового аватара користувача, якщо користувач не загружає файл з аватар
+const path = require("path");
+const fs = require("fs/promises");
 
 const { User } = require("../../models/user"); // модель, схема валідації user
 const { HttpError, ctrlWrapper } = require("../../helpers"); // обробка помилок
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -14,7 +19,12 @@ const signup = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10); // хешуємо пароль для бази даних
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  // const avatarURL = gravatar.url(email); // створення тимчасової аватарки користувача для збереження в базі даних
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+  });
 
   res.status(201).json({
     status: "success",
@@ -24,6 +34,7 @@ const signup = async (req, res) => {
       id: newUser.id,
       name: newUser.name,
       email: newUser.email,
+      avatarURL: newUser.avatarURL,
     },
   });
 };
@@ -74,9 +85,24 @@ const current = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({
+    avatarURL,
+  });
+};
+
 module.exports = {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

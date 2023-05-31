@@ -3,15 +3,17 @@ const { HttpError, ctrlWrapper } = require("../../helpers");
 
 const getContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20, favorite = null } = req.query;
-  const skip = (page - 1) * limit;
+  const { page = 1, limit = 20, favorite = null } = req.query; // для передачі додаткових параметрів для пагінації та статусу контакту
+  const skip = (page - 1) * limit; // скільки елементів пропустити, щоб відобразити елементи на заданій сторінці при заданому ліміті
 
   let contacts = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    // відображення всіх елементів з- чи без- пагінації
     skip,
     limit,
   }).populate("owner", "name email");
 
   if (favorite !== null) {
+    // знаходження елементів лише із заданим значенням параметра favorite з пагінацією або без
     contacts = await Contact.find(
       { owner, favorite },
       "-createdAt -updatedAt",

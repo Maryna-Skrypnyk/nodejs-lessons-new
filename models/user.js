@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const gravatar = require("gravatar"); // для створення тимчасового аватара користувача, якщо користувач не загружає файл з аватар
 const { handleMongooseError } = require("../helpers");
 
 const patternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -18,16 +19,17 @@ const userSchema = new Schema(
       unique: [true, "bd already includes email"],
       required: [true, "Email is required"],
       match: patternEmail,
-      // validate(value) {
-      //   const re = /\S+@\S+.\S+/;
-      //   return re.test(String(value).toLowerCase());
-      // },
     },
     password: {
       type: String,
-      // match: patternPassword,
       minlength: 8,
       required: [true, "Password is required"],
+    },
+    avatarURL: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: "250" }, true);
+      },
     },
     token: {
       type: String,
