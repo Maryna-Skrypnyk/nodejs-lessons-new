@@ -530,16 +530,16 @@
         }
       }
     },
-    "/api/auth/avatars": {
+    "/api/auth/avatar": {
       "patch": {
         "tags": ["User"],
-        "summary": "User avatar",
+        "summary": "Upload a new user avatar",
         "consumes": ["multipart/form-data"],
         "parameters": [
           {
             "name": "avatar",
-            "in": "query",
-            "description": "upload a new avatar",
+            "in": "formData",
+            "description": "The user's avatar image file",
             "required": true,
             "style": "form",
             "explode": true,
@@ -556,13 +556,52 @@
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
-          },
-          "security": [
-            {
-              "Bearer": []
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "avatarURL": {
+                      "type": "string",
+                      "example": "avatars\\64777f6bd743b9cc48de48d6_photo_2021-07-01_22-01-38.jpg"
+                    }
+                  }
+                }
+              }
             }
-          ]
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
