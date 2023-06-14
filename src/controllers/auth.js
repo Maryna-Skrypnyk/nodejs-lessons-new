@@ -86,58 +86,6 @@ const current = async (req, res) => {
   });
 };
 
-// const updateAvatar = async (req, res) => {
-//   const { _id } = req.user;
-//   const { path: tempUpload, originalname } = req.file;
-//   const filename = `${_id}_${originalname}`;
-//   const resultUpload = path.join(avatarsDir, filename);
-//   await fs.rename(tempUpload, resultUpload);
-
-//   let avatarURL = (await Jimp.read(resultUpload))
-//     .autocrop()
-//     .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE)
-//     .writeAsync(resultUpload);
-
-//   avatarURL = path.join("avatars", filename);
-//   await User.findByIdAndUpdate(_id, { avatarURL });
-
-//   res.status(200).json({
-//     status: "success",
-//     code: 200,
-//     message: "Avatar updated",
-//     data: {
-//       avatarURL,
-//     },
-//   });
-// };
-
-// const updateAvatar = async (req, res) => {
-//   const { _id } = req.user;
-//   const { path: tempUpload, originalname } = req.file;
-//   const filename = `${_id}_${originalname}`;
-//   const resultUpload = path.join(avatarsDir, filename);
-//   await fs.rename(tempUpload, resultUpload);
-
-//   await Jimp.read(resultUpload);
-//   const image = await Jimp.read(resultUpload);
-//   await image
-//     .autocrop()
-//     .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE)
-//     .writeAsync(resultUpload);
-
-//   const avatarURL = path.join("avatars", filename);
-//   await User.findByIdAndUpdate(_id, { avatarURL });
-
-//   res.status(200).json({
-//     status: "success",
-//     code: 200,
-//     message: "Avatar updated",
-//     data: {
-//       avatarURL,
-//     },
-//   });
-// };
-
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
@@ -145,11 +93,11 @@ const updateAvatar = async (req, res) => {
   const resultUpload = path.join(avatarsDir, filename);
   await fs.rename(tempUpload, resultUpload);
 
-  const image = await Jimp.read(resultUpload);
-  await image
+  const image = await Jimp.read(resultUpload); // читаємо файл з зображенням
+  await image // обробка зображення
     .autocrop()
     .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE)
-    .writeAsync(resultUpload);
+    .writeAsync(resultUpload); // збереження зміненого зображення
 
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
@@ -163,10 +111,6 @@ const updateAvatar = async (req, res) => {
     },
   });
 };
-
-// const pic = await Jimp.read(resultUpload); // Завантаження зображення з файлу
-// await pic.resize(250, 250); // Зміна розмірів зображення на 250x250 пікселів
-// await pic.write(resultUpload); // Збереження зображення з новими розмірами
 
 module.exports = {
   signup: ctrlWrapper(signup),
