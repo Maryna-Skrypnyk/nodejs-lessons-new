@@ -486,6 +486,129 @@
         }
       }
     },
+    "/api/auth/avatar": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Upload a new user avatar",
+        "consumes": ["multipart/form-data"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "avatar",
+            "in": "formData",
+            "description": "The user's avatar image file",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "file"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Avatar updated"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "avatarURL": "avatars\\64777f6bd743b9cc48de48d6_photo_2021-07-01_22-01-38.jpg"
+                      },
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "path/to/userAvatar"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Wrong format for avatar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/update": {
       "put": {
         "tags": ["User"],
@@ -530,81 +653,6 @@
         }
       }
     },
-    "/api/auth/avatar": {
-      "patch": {
-        "tags": ["User"],
-        "summary": "Upload a new user avatar",
-        "consumes": ["multipart/form-data"],
-        "parameters": [
-          {
-            "name": "avatar",
-            "in": "formData",
-            "description": "The user's avatar image file",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "file"
-            }
-          }
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "avatarURL": {
-                      "type": "string",
-                      "example": "avatars\\64777f6bd743b9cc48de48d6_photo_2021-07-01_22-01-38.jpg"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Bad Request"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Not found"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/auth/verify": {
       "post": {
         "tags": ["User"],
@@ -643,7 +691,7 @@
         }
       }
     },
-    "/auth/google": {
+    "/api/auth/google": {
       "get": {
         "tags": ["User"],
         "summary": "Google authentication ",

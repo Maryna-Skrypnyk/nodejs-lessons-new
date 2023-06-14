@@ -12,6 +12,6 @@ mongoose
     });
   })
   .catch((error) => {
-    console.log(error.message);
+    console.log(`Server not run, Error: ${error.message}`);
     process.exit(1);
   });
